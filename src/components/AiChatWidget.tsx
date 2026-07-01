@@ -16,8 +16,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import {ChatMessages} from "@openrouter/sdk/models";
-import {getAiResults} from "../ai/aiHandler";
-import {SYSTEM_PROMPT} from "../ai/systemPrompt";
+import {getAiResults} from "../AI/aiHandler";
+import {SYSTEM_PROMPT} from "../AI/systemPrompt";
 
 // export interface ChatMessage {
 //   // id: number;
