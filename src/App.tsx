@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import Sidebar from "./components/Sidebar";
+import AiChatWidget from "./components/AiChatWidget";
 import Home from "./pages/Home";
 import Sales from "./pages/Sales";
 import Retailers from "./pages/Retailers";
@@ -20,6 +21,8 @@ export default function App() {
           </Routes>
         </Box>
       </Box>
+      {/* Mounted once here, so it floats over every page/route */}
+      <AiChatWidget />
     </BrowserRouter>
   );
 }
