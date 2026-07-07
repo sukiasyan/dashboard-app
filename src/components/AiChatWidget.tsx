@@ -18,12 +18,32 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import {ChatMessages} from "@openrouter/sdk/models";
 import {getAiResults} from "../AI/aiHandler";
 import {SYSTEM_PROMPT} from "../AI/systemPrompt";
+import { useNavigate } from "react-router-dom";
+
 
 // export interface ChatMessage {
 //   // id: number;
 //   role: string;
 //   content: string;
 // }
+
+// Map the "page" value from the AI response to your actual routes
+const PAGE_ROUTES: Record<string, string> = {
+  home: "/",
+  sales: "/sales",
+  retailers: "/retailers",
+  brands: "/brands",
+};
+
+// Try to pull a JSON object out of the AI reply, even if wrapped in ```json fences
+function tryParseAiJson(text: string): any | null {
+  const cleaned = text.trim().replace(/^```json\s*|```$/g, "").trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    return null;
+  }
+}
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement<any, any> },
@@ -42,6 +62,8 @@ async function getAssistantReply(userMsg: ChatMessages[]): Promise<string> {
 }
 
 export default function AiChatWidget() {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,6 +88,21 @@ console.log('Function: AiChatWidget - Line 46 - ', messages);
 
     try {
       const reply = await getAssistantReply([...messages, userMsg]);
+      const parsed = tryParseAiJson(reply);
+
+      if (parsed?.type === "ANALYTICS_QUERY" && parsed.page) {
+        const route = PAGE_ROUTES[parsed.page];
+        if (route) {
+          setMessages((prev) => [
+            ...prev,
+            { role: "system", content: `Taking you to ${parsed.page}...` },
+          ]);
+          setOpen(false); // close the widget so the page is visible
+          navigate(route, { state: parsed }); // <-- pass the whole object
+          return;
+        }
+      }
+
       setMessages((prev) => [...prev, { role: "system", content: reply }]);
     } catch (error) {
       console.error("AI Error:", error);
