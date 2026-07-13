@@ -4,21 +4,6 @@ import { Box, Typography, TextField } from "@mui/material";
 import { sales } from "../data/sales";
 import { useLocation } from "react-router-dom";
 
-// Simulated API payload
-// const responseData = {
-//   type: "ANALYTICS_QUERY",
-//   page: "sales",
-//   metrics: ["sales"],
-//   filters: {
-//     date_from: "2023-09-25",
-//     date_to: "2023-10-01"
-//   },
-//   sort: {
-//     field: "sales", // Maps to 'amount' in your rows
-//     direction: "asc"
-//   },
-//   limit: 10
-// };
 
 const columns: GridColDef[] = [
   { field: "product", headerName: "Product", flex: 1, minWidth: 150 },
